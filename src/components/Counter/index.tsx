@@ -1,16 +1,16 @@
 import { useState } from 'react'
 
-import { Button } from './styles'
+import * as S from './styles'
 
 export const Counter = () => {
   const [count, setCount] = useState(0)
 
   return (
-    <>
+    <div>
       <h1>
-        Count <span>{count}</span>
+        Count: <span data-testid="counter-view">{count}</span>
       </h1>
-      <Button onClick={() => setCount(count + 1)}>Increment</Button>
-    </>
+      <S.Button onClick={() => setCount(count + 1)}>Increment</S.Button>
+    </div>
   )
 }
