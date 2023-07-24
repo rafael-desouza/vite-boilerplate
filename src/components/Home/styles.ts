@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const Container = styled.div`
@@ -19,7 +20,7 @@ export const Message = styled.p`
   margin-bottom: 30px;
 `
 
-export const LinkButton = styled.a`
+export const LinkButton = styled(Link)`
   display: inline-block;
   padding: 10px 20px;
   background-color: #007bff;
