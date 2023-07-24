@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 import * as S from './styles'
 
-export const HomePage = () => {
+export const Home = () => {
   return (
     <S.Container>
       <S.Title>Welcome to the Home Page</S.Title>

@@ -1,18 +1,18 @@
 import { Meta, StoryObj } from '@storybook/react'
 import { withRouter } from 'storybook-addon-react-router-v6'
 
-import { HomePage } from './index'
+import { Home } from './index'
 
-const meta: Meta<typeof HomePage> = {
+const meta: Meta<typeof Home> = {
   title: 'Example/HomePage',
-  component: HomePage,
+  component: Home,
   decorators: [withRouter],
   parameters: {
     reactRouter: {
       routePath: '/Counter'
     }
   }
-} satisfies Meta<typeof HomePage>
+} satisfies Meta<typeof Home>
 
 export default meta
 
