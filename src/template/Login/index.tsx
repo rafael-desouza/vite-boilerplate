@@ -1,25 +1,23 @@
 import React, { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import * as S from './styles'
 
-import { loginMock } from '../../__mocks__/authService'
-import AuthService from '../../services/authService'
+import { useAuth } from '../../contexts/AuthState'
 
 export const Login: React.FC = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  const { login } = useAuth()
+  const navigate = useNavigate()
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response =
-        process.env.NODE_ENV === 'development'
-          ? await loginMock(username, password)
-          : await AuthService.login(username, password)
-      console.log('Token JWT:', response.token)
+      await login(username, password)
 
-      return <Navigate to="/" />
+      return navigate('/')
     } catch (error) {
       console.error('Erro ao fazer login:', error)
     }

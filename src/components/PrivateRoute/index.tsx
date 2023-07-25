@@ -1,12 +1,11 @@
-import Cookies from 'js-cookie'
 import { Navigate, Outlet } from 'react-router-dom'
 
-const isAuthenticated = (): boolean => {
-  return !!Cookies.get('token')
-}
+import { useAuth } from '../../contexts/AuthState'
 
 export const PrivateRoute = () => {
-  const auth = isAuthenticated()
+  const { isAuthenticated } = useAuth()
+
+  const auth = isAuthenticated
 
   return auth ? <Outlet /> : <Navigate to="/login" />
 }
