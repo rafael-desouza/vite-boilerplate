@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 export const Button = styled.button`
   ${({ theme }) => css`
-    background-color: ${theme.colors.primary};
+    background-color: ${theme.colors.blue[400]};
     color: ${theme.colors.black};
     padding: 0.5rem 1rem;
     border: none;
