@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import * as S from './styles'
@@ -9,7 +9,7 @@ export const Login: React.FC = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const { login } = useAuth()
+  const { login, isAuthenticated } = useAuth()
   const navigate = useNavigate()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -19,15 +19,19 @@ export const Login: React.FC = () => {
 
       return navigate('/')
     } catch (error) {
-      console.error('Erro ao fazer login:', error)
+      console.error(error)
     }
   }
+
+  useEffect(() => {
+    if (isAuthenticated) navigate('/')
+  }, [isAuthenticated, navigate])
 
   return (
     <S.Form onSubmit={handleLogin}>
       <S.Input
         type="text"
-        placeholder="Usuário"
+        placeholder="email"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />

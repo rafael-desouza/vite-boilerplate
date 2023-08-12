@@ -2,7 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 import { useAuth } from '../../contexts/AuthState'
 
-export const PrivateRoute = () => {
+export const PrivateRoutes = () => {
   const { isAuthenticated } = useAuth()
 
   const auth = isAuthenticated

@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState } from 'react'
 
 interface AuthContextData {
   token: string | null
-  login: (username: string, password: string) => Promise<void>
+  login: (email: string, password: string) => Promise<void>
   logout: () => void
   isAuthenticated: boolean
 }
@@ -25,12 +25,12 @@ export const AuthProvider: React.FC = ({ children }) => {
     Cookies.get('token') || null
   )
 
-  const API_URL = 'testApi'
+  const login = async (email: string, password: string) => {
+    const API_URL = import.meta.env.VITE_API_URL
 
-  const login = async (username: string, password: string) => {
     try {
-      const response = await axios.post(`${API_URL}/login`, {
-        username,
+      const response = await axios.post(`${API_URL}/auth/signin`, {
+        email,
         password
       })
       const { token } = response.data
