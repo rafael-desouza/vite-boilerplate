@@ -5,7 +5,7 @@ import * as S from './styles'
 
 import { useAuth } from '../../contexts/AuthState'
 
-export const Login: React.FC = () => {
+export const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 

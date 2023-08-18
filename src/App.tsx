@@ -1,26 +1,13 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { RouterProvider } from 'react-router-dom'
 
-import { Menu } from './components/Menu'
-import { PrivateRoutes } from './components/PrivateRoutes'
-import { CounterPage } from './pages/CounterPage'
-import { HomePage } from './pages/HomePage'
-import { LoginPage } from './pages/LoginPage'
+import { AppRouter } from './router'
 
 function App() {
   return (
-    <Router>
-      <Menu />
-
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-
-        <Route element={<PrivateRoutes />}>
-          <Route path="/" element={<HomePage />} />
-
-          <Route path="/counter" element={<CounterPage />} />
-        </Route>
-      </Routes>
-    </Router>
+    <RouterProvider
+      router={AppRouter}
+      fallbackElement={<p>Initial Load...</p>}
+    />
   )
 }
 
