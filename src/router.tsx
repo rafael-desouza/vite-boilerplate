@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 import { Counter } from './components/Counter'
-import { ContactPage } from './pages/Contact/ContactPage'
+import { ContactPage, contactLoader } from './pages/Contact/ContactPage'
 import { ErrorPage } from './pages/Error/ErrorPage'
-import { Home } from './pages/Home/Home'
+import { Home, getContacts } from './pages/Home/Home'
 import { PublicRoot } from './pages/PublicRoot/PublicRoot'
 
 export const AppRouter = createBrowserRouter([
@@ -13,6 +13,7 @@ export const AppRouter = createBrowserRouter([
     children: [
       {
         path: '/',
+        loader: getContacts,
         element: <Home />
       },
       {
@@ -21,6 +22,7 @@ export const AppRouter = createBrowserRouter([
       },
       {
         path: 'contact/:contactId',
+        loader: contactLoader,
         element: <ContactPage />
       }
     ]

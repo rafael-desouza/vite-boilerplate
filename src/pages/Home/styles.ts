@@ -34,3 +34,26 @@ export const LinkButton = styled(Link)`
     background-color: #0056b3;
   }
 `
+
+export const Contacts = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5%;
+`
+
+export const Contact = styled(Link)`
+  display: inline-block;
+  flex: 30%;
+  background-color: #7b00ff;
+  padding: 0.5rem 0;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+
+  &:hover {
+    background-color: #5600b3;
+  }
+`

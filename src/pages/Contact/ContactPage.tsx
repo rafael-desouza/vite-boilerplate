@@ -1,76 +1,27 @@
-import { Form } from 'react-router-dom'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useLoaderData } from 'react-router-dom'
+
+import requestWithZod from '../../api/request'
+import { Contact, ContactSchema } from './ContactSchema'
 
 export const ContactPage = () => {
-  const contact = {
-    name: 'Your',
-    last: 'Name',
-    avatar: 'https://placekitten.com/g/200/200',
-    twitter: 'your_handle',
-    notes: 'Some notes',
-    favorite: true
-  }
+  const data = useLoaderData() as Contact
 
   return (
-    <div id="contact">
-      <div>
-        <img key={contact.avatar} src={contact.avatar || null} />
-      </div>
-
-      <div>
-        <h1>
-          {contact.name || contact.last ? (
-            <>
-              {contact.name} {contact.last}
-            </>
-          ) : (
-            <i>No Name</i>
-          )}{' '}
-          <Favorite contact={contact} />
-        </h1>
-
-        {contact.twitter && (
-          <p>
-            <a target="_blank" href={`https://twitter.com/${contact.twitter}`}>
-              {contact.twitter}
-            </a>
-          </p>
-        )}
-
-        {contact.notes && <p>{contact.notes}</p>}
-
-        <div>
-          <Form action="edit">
-            <button type="submit">Edit</button>
-          </Form>
-          <Form
-            method="post"
-            action="destroy"
-            onSubmit={(event) => {
-              if (!confirm('Please confirm you want to delete this record.')) {
-                event.preventDefault()
-              }
-            }}
-          >
-            <button type="submit">Delete</button>
-          </Form>
-        </div>
-      </div>
+    <div>
+      <h1>{data?.name}</h1>
+      <h2>{data?.height}</h2>
+      <p>{data?.skin_color}</p>
+      <p>{data?.skin_color}</p>
     </div>
   )
 }
 
-function Favorite({ contact }) {
-  // yes, this is a `let` for later
-  let favorite = contact.favorite
-  return (
-    <Form method="post">
-      <button
-        name="favorite"
-        value={favorite ? 'false' : 'true'}
-        aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
-      >
-        {favorite ? '★' : '☆'}
-      </button>
-    </Form>
+export const contactLoader = async ({ params }: any) => {
+  const { data } = await requestWithZod<Contact>(
+    `https://swapi.dev/api/people/${params.contactId}`,
+    ContactSchema
   )
+
+  return data
 }
