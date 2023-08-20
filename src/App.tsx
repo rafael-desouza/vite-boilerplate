@@ -1,3 +1,4 @@
+import './@mocks/mockApi'
 import { RouterProvider } from 'react-router-dom'
 
 import { AppRouter } from './router'

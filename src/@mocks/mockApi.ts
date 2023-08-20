@@ -62,7 +62,9 @@ if (process.env.NODE_ENV === 'development') {
         200,
         {
           status: 'success',
-          token: 'fake-jwt-token'
+          token: 'fake-jwt-token',
+          user: 'Rafael',
+          role: 'Admin'
         }
       ]
     }

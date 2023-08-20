@@ -1,6 +1,7 @@
 import styled from 'styled-components'
+import { Form } from 'react-router-dom'
 
-export const Form = styled.form`
+export const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
   align-items: center;

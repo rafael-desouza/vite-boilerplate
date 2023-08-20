@@ -1,47 +1,53 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import {
+  LoaderFunctionArgs,
+  redirect,
+  useActionData,
+  useLocation,
+  useNavigation
+} from 'react-router-dom'
 
 import * as S from './styles'
-
-import { useAuth } from '../../contexts/AuthState'
+import { AuthProvider } from '../../Auth/AuthProvider'
 
 export const Login = () => {
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const { login, isAuthenticated } = useAuth()
-  const navigate = useNavigate()
+  const location = useLocation()
+  const params = new URLSearchParams(location.search)
+  const from = params.get('from') || '/'
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try {
-      await login(username, password)
+  const navigation = useNavigation()
+  const isLoggingIn = navigation.formData?.get('email') != null
 
-      return navigate('/')
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  useEffect(() => {
-    if (isAuthenticated) navigate('/')
-  }, [isAuthenticated, navigate])
+  const actionData = useActionData() as { error: string } | undefined
 
   return (
-    <S.Form onSubmit={handleLogin}>
+    <S.StyledForm method="POST">
+      <input type="hidden" name="redirectTo" value={from} />
       <S.Input
+        autoComplete="off"
+        name="email"
         type="text"
         placeholder="email"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <S.Input
+        autoComplete="off"
+        name="password"
         type="password"
         placeholder="Senha"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <S.Button type="submit">Entrar</S.Button>
-    </S.Form>
+      <S.Button type="submit">
+        {isLoggingIn ? 'Logging in...' : 'Login'}
+      </S.Button>
+      {actionData && actionData.error ? (
+        <p style={{ color: 'red' }}>{actionData.error}</p>
+      ) : null}
+    </S.StyledForm>
   )
 }
