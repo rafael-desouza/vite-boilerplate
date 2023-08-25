@@ -1,8 +1,9 @@
-import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
+import { api } from '../services/api'
+import { USER_ROLES } from '../helpers/types'
 
 if (process.env.NODE_ENV === 'development') {
-  const mock = new MockAdapter(axios)
+  const mock = new MockAdapter(api)
   const API_URL = import.meta.env.VITE_API_URL
 
   mock.onGet(`${API_URL}/contacts/`).reply(200, {
@@ -63,10 +64,28 @@ if (process.env.NODE_ENV === 'development') {
         {
           status: 'success',
           token: 'fake-jwt-token',
-          user: 'Rafael',
-          role: 'Admin'
+          username: 'Rafael'
         }
       ]
+    }
+
+    return [
+      401,
+      {
+        status: 'error',
+        message: 'Invalid email or password'
+      }
+    ]
+  })
+
+  mock.onGet(`${API_URL}/auth/role`).reply((config) => {
+    const authorizationHeader = config.headers?.['Authorization']
+
+    if (authorizationHeader) {
+      const token = authorizationHeader.split(' ')[1]
+      if (token) {
+        return [200, { role: USER_ROLES.USER }]
+      }
     }
 
     return [

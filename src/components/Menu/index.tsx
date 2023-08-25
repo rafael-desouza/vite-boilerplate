@@ -22,7 +22,7 @@ export const Menu = () => {
         <S.LeftSideContainer>
           <S.NavbarLinkContainer>
             <S.NavbarLink to="/"> Home </S.NavbarLink>
-            <S.NavbarLink to="/counter"> Counter </S.NavbarLink>
+            <S.NavbarLink to="/admin/counter"> Counter </S.NavbarLink>
             <S.OpenLinksButton onClick={handleExtendNavBar}>
               {extendNavBar ? <FaTimes /> : <FaBars />}
             </S.OpenLinksButton>
@@ -38,7 +38,10 @@ export const Menu = () => {
             Home
           </S.NavbarLinkExtended>
 
-          <S.NavbarLinkExtended to="/counter" onClick={handleExtendNavBar}>
+          <S.NavbarLinkExtended
+            to="/admin/counter"
+            onClick={handleExtendNavBar}
+          >
             Counter
           </S.NavbarLinkExtended>
         </S.NavbarExtendedContainer>

@@ -1,52 +1,33 @@
 import { LoaderFunctionArgs, redirect } from 'react-router-dom'
 
-import { AuthProvider, authProvider } from './AuthProvider'
+import { USER_ROLES } from '../helpers/types'
+import { axiosRequest } from '../services/api'
+import { authProvider } from './AuthProvider'
+import { Role, RoleSchema } from './AuthSchema'
 
-export function protectedLoader({ request }: LoaderFunctionArgs) {
-  const authProvider = new AuthProvider()
+export interface RoleProtectLoader extends LoaderFunctionArgs {
+  requestedRole: USER_ROLES
+}
 
+export async function protectedLoader({
+  request,
+  requestedRole
+}: RoleProtectLoader) {
   if (!authProvider.isAuthenticated) {
     const params = new URLSearchParams()
     params.set('from', new URL(request.url).pathname)
     return redirect('/login?' + params.toString())
   }
 
-  return null
-}
-
-export async function loginAction({ request }: LoaderFunctionArgs) {
-  const formData = await request.formData()
-  const email = formData.get('email') as string | null
-  const password = formData.get('password') as string | null
-
-  if (!email) {
-    return {
-      error: 'You must provide a email to log in'
-    }
-  }
-
-  if (!password) {
-    return {
-      error: 'You must provide a password to log in'
-    }
-  }
-
   try {
-    await authProvider.login(email, password)
-  } catch (error) {
-    return {
-      error: 'Invalid login attempt'
-    }
+    const response = await axiosRequest<Role, typeof RoleSchema>('/auth/role')
+
+    const { role: userRole } = response.data
+
+    if (userRole !== requestedRole) return redirect('/')
+
+    return null
+  } catch (e) {
+    return redirect('/')
   }
-
-  const redirectTo = formData.get('redirectTo') as string | null
-  return redirect(redirectTo || '/')
 }
-
-export async function logoutAction() {
-  authProvider.logout()
-
-  return redirect('/')
-}
-
-export async function getUserDataAction() {}

@@ -1,14 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import {
-  LoaderFunctionArgs,
-  redirect,
-  useActionData,
-  useLocation,
-  useNavigation
-} from 'react-router-dom'
+import { useState } from 'react'
+import { useActionData, useLocation, useNavigation } from 'react-router-dom'
 
 import * as S from './styles'
-import { AuthProvider } from '../../Auth/AuthProvider'
 
 export const Login = () => {
   const [email, setEmail] = useState('')

@@ -1,11 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 
-import {
-  loginAction,
-  logoutAction,
-  protectedLoader
-} from './Auth/protectedLoader'
+import { loginAction } from './Auth/loginAction'
+import { logoutAction } from './Auth/logoutAction'
+import { protectedLoader } from './Auth/protectedLoader'
 import { Counter } from './components/Counter'
+import { USER_ROLES } from './helpers/types'
 import { ContactPage, contactLoader } from './pages/Contact/ContactPage'
 import { ErrorPage } from './pages/Error/ErrorPage'
 import { Home, getContacts } from './pages/Home/Home'
@@ -23,11 +22,6 @@ export const AppRouter = createBrowserRouter([
         element: <Home />
       },
       {
-        path: 'counter',
-        loader: protectedLoader,
-        element: <Counter />
-      },
-      {
         path: 'contact/:contactId',
         loader: contactLoader,
         element: <ContactPage />
@@ -40,6 +34,18 @@ export const AppRouter = createBrowserRouter([
       {
         path: '/logout',
         loader: logoutAction
+      }
+    ]
+  },
+  {
+    element: <PublicRoot />,
+    path: 'admin',
+    loader: (args) =>
+      protectedLoader({ ...args, requestedRole: USER_ROLES.USER }),
+    children: [
+      {
+        path: 'counter',
+        element: <Counter />
       }
     ]
   }

@@ -1,10 +1,12 @@
-import axios from 'axios'
+import { AxiosRequestConfig } from 'axios'
 import Cookies from 'js-cookie'
+
+import { api, axiosRequest } from '../services/api'
+import { Login, LoginSchema } from './AuthSchema'
 
 interface AuthProviderInterface {
   token: string | null
-  user: string | null
-  role: string | null
+  username: string | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
   isAuthenticated: boolean
@@ -12,32 +14,41 @@ interface AuthProviderInterface {
 
 export class AuthProvider implements AuthProviderInterface {
   token: string | null = Cookies.get('token') || null
-  user: string | null = Cookies.get('user') || null
+  username: string | null = Cookies.get('user') || null
   role: string | null = Cookies.get('role') || null
 
   get isAuthenticated(): boolean {
-    return !!this.token
+    if (!this.token) return false
+
+    this.setAuthHeader()
+    return true
   }
 
   async login(email: string, password: string) {
-    const API_URL = import.meta.env.VITE_API_URL
-
-    try {
-      const response = await axios.post<{
-        token: string
-        user: string
-        role: string
-      }>(`${API_URL}/auth/signin`, {
+    const config: AxiosRequestConfig = {
+      data: {
         email,
         password
-      })
+      },
+      method: 'POST'
+    }
+
+    try {
+      const response = await axiosRequest<Login, typeof LoginSchema>(
+        '/auth/signin',
+        LoginSchema,
+        config
+      )
+
+      if (!response.data) throw new Error('Invalid Credentials')
 
       this.token = response.data.token
-      this.user = response.data.user
-      this.role = response.data.role
-      Cookies.set('token', this.token, { expires: 7 })
-      Cookies.set('user', this.user, { expires: 7 })
-      Cookies.set('role', this.role, { expires: 7 })
+      this.username = response.data.username
+
+      this.setAuthHeader()
+
+      Cookies.set('token', this.token, { expires: 7, secure: true })
+      Cookies.set('username', this.username, { expires: 7 })
     } catch (error) {
       throw new Error('Something went wrong')
     }
@@ -45,12 +56,16 @@ export class AuthProvider implements AuthProviderInterface {
 
   logout() {
     this.token = null
-    this.user = null
-    this.role = null
+    this.username = null
 
     Cookies.remove('token')
     Cookies.remove('user')
-    Cookies.remove('role')
+
+    api.defaults.headers.common['Authorization'] = undefined
+  }
+
+  setAuthHeader() {
+    api.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
   }
 }
 

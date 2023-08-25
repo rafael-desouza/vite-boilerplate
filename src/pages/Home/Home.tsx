@@ -2,7 +2,7 @@ import { useLoaderData } from 'react-router-dom'
 
 import * as S from './styles'
 
-import requestWithZod from '../../api/request'
+import { axiosRequest } from '../../services/api'
 import { Contacts, ContactsSchema } from './ContactsSchema'
 
 export const Home = () => {
@@ -30,12 +30,14 @@ export const Home = () => {
 }
 
 export const getContacts = async () => {
-  const API_URL = import.meta.env.VITE_API_URL
+  try {
+    const response = await axiosRequest<Contacts, typeof ContactsSchema>(
+      `/contacts/`,
+      ContactsSchema
+    )
 
-  const { data } = await requestWithZod<Contacts>(
-    `${API_URL}/contacts/`,
-    ContactsSchema
-  )
-
-  return data
+    return response.data
+  } catch (error) {
+    return error
+  }
 }
