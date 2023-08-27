@@ -18,34 +18,36 @@ export const Menu = () => {
 
   return (
     <S.NavbarContainer extendNavBar={extendNavBar}>
-      <S.NavbarInnerContainer>
-        <S.LeftSideContainer>
-          <S.NavbarLinkContainer>
-            <S.NavbarLink to="/"> Home </S.NavbarLink>
-            <S.NavbarLink to="/admin/counter"> Counter </S.NavbarLink>
-            <S.OpenLinksButton onClick={handleExtendNavBar}>
-              {extendNavBar ? <FaTimes /> : <FaBars />}
-            </S.OpenLinksButton>
-          </S.NavbarLinkContainer>
-        </S.LeftSideContainer>
-        <S.RightSideContainer>
-          <S.Logo>Logo</S.Logo>
-        </S.RightSideContainer>
-      </S.NavbarInnerContainer>
-      {extendNavBar && (
-        <S.NavbarExtendedContainer>
-          <S.NavbarLinkExtended to="/" onClick={handleExtendNavBar}>
+      <S.LeftSideContainer>
+        <S.OpenLinksButton onClick={handleExtendNavBar}>
+          {extendNavBar ? <FaTimes /> : <FaBars />}
+        </S.OpenLinksButton>
+      </S.LeftSideContainer>
+      <S.MiddleContainer extendNavBar={extendNavBar}>
+        <S.NavbarLinkContainer>
+          <S.NavbarLink to="/" onClick={handleExtendNavBar}>
             Home
-          </S.NavbarLinkExtended>
-
-          <S.NavbarLinkExtended
-            to="/admin/counter"
-            onClick={handleExtendNavBar}
-          >
+          </S.NavbarLink>
+          <S.NavbarLink to="/admin/counter" onClick={handleExtendNavBar}>
             Counter
-          </S.NavbarLinkExtended>
-        </S.NavbarExtendedContainer>
-      )}
+          </S.NavbarLink>
+          <S.NavbarLink to="/" onClick={handleExtendNavBar}>
+            Home
+          </S.NavbarLink>
+          <S.NavbarLink to="/admin/counter" onClick={handleExtendNavBar}>
+            Counter
+          </S.NavbarLink>
+          <S.NavbarLink to="/" onClick={handleExtendNavBar}>
+            Home
+          </S.NavbarLink>
+          <S.NavbarLink to="/admin/counter" onClick={handleExtendNavBar}>
+            Counter
+          </S.NavbarLink>
+        </S.NavbarLinkContainer>
+      </S.MiddleContainer>
+      <S.RightSideContainer>
+        <S.Logo>Logo</S.Logo>{' '}
+      </S.RightSideContainer>
     </S.NavbarContainer>
   )
 }
