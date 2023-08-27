@@ -8,6 +8,7 @@ const ResetStyles = createGlobalStyle`
    margin: 0;
    font-family: 'Playfair Display', serif;
    background-color:  #f6f6f0;
+   box-sizing: border-box;
  }
 
  a {

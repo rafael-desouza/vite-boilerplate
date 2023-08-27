@@ -44,7 +44,7 @@ export const AppRouter = createBrowserRouter([
       protectedLoader({ ...args, requestedRole: USER_ROLES.USER }),
     children: [
       {
-        path: 'counter',
+        path: '/admin/counter',
         element: <Counter />
       }
     ]
