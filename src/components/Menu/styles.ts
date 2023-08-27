@@ -1,10 +1,11 @@
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { css, styled } from 'styled-components'
 
-const shouldForwardProp = (prop: string) => !['extendNavBar'].includes(prop)
+const shouldForwardProp = (prop: string) => !['isOpen'].includes(prop)
 
 type Props = {
-  extendNavBar: boolean
+  isOpen: boolean
 }
 
 /**
@@ -12,18 +13,18 @@ type Props = {
  * shouldForwardProp: With this feature, you can specify which props should be forwarded to the DOM.
  */
 
-export const NavbarContainer = styled.nav.withConfig({
+export const NavbarContainer = styled(motion.nav).withConfig({
   shouldForwardProp
 })<Props>`
-  ${({ theme, extendNavBar }) => css`
+  ${({ theme, isOpen }) => css`
     width: 100%;
-    height: ${extendNavBar ? '100vh' : '80px'};
+    padding: 0 ${theme.size[5]};
+    height: ${isOpen ? '100vh' : '80px'};
     display: grid;
     grid-template-rows: 80px calc(100vh - 80px);
     grid-template-columns: 50% 50%;
     background-color: black;
-
-    transition: 0.5s height ease-in-out;
+    overflow: hidden;
 
     @media screen and (min-width: ${theme.screens.sm}) {
       grid-template-columns: 70% 30%;
@@ -42,27 +43,15 @@ export const LeftSideContainer = styled.nav`
   `}
 `
 
-export const MiddleContainer = styled.nav.withConfig({
+export const MiddleContainer = styled(motion.div).withConfig({
   shouldForwardProp
 })<Props>`
-  ${({ theme, extendNavBar }) => css`
+  ${({ theme }) => css`
     grid-row: 2/ 3;
     grid-column: 1 / 3;
     display: flex;
-    max-height: ${extendNavBar ? '100%' : '0'};
-    opacity: ${extendNavBar ? '1' : '0'};
-    transform: ${extendNavBar ? 'translateY(0%)' : 'translateY(-100%)'};
-    overflow: hidden;
-
-    transition:
-      max-height 0.5s ease-in-out,
-      opacity 0.5s ease-in-out,
-      transform 0.5s ease-in-out;
 
     @media screen and (min-width: ${theme.screens.sm}) {
-      max-height: 100%;
-      opacity: 1;
-      transform: translateY(0);
       grid-row: 1 / 2;
       grid-column: 1 / 2;
     }
@@ -70,16 +59,14 @@ export const MiddleContainer = styled.nav.withConfig({
 `
 
 export const RightSideContainer = styled.nav`
-  ${({ theme }) => css`
-    grid-row: 1 / 2;
-    grid-column: 2 / 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  `}
+  grid-row: 1 / 2;
+  grid-column: 2 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
-export const NavbarLinkContainer = styled.div`
+export const NavbarLinkContainer = styled(motion.div)`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
@@ -89,14 +76,13 @@ export const NavbarLinkContainer = styled.div`
 
     @media screen and (min-width: ${theme.screens.sm}) {
       flex-direction: row;
-      justify-content: flex-start;
+      justify-content: space-between;
     }
   `}
 `
 
 export const NavbarLink = styled(Link)`
   ${({ theme }) => css`
-    color: ${theme.colors.white};
     font-size: ${theme.fonts.sizes['4xl']};
     font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
@@ -117,19 +103,6 @@ export const NavbarLink = styled(Link)`
     @media screen and (min-width: ${theme.screens.xl}) {
       font-size: ${theme.fonts.sizes['4xl']};
     }
-  `}
-`
-
-export const OpenLinksButton = styled.button`
-  ${({ theme }) => css`
-    width: ${theme.size[16]};
-    height: ${theme.size[14]};
-    background: none;
-    border: none;
-    color: white;
-    font-size: ${theme.fonts.sizes['5xl']};
-    cursor: pointer;
-    display: block;
   `}
 `
 

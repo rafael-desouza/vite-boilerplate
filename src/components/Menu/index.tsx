@@ -1,53 +1,91 @@
 import { useEffect, useState } from 'react'
-import { FaBars, FaTimes } from 'react-icons/fa'
 
 import * as S from './styles'
 
-export const Menu = () => {
-  const [extendNavBar, setExtendNavBar] = useState(false)
+import { MenuToggle } from '../MenuToogle'
+import theme from '../../styles/theme'
+import { useMediaQuery } from 'react-responsive'
+import { Variants, motion } from 'framer-motion'
+import {
+  mobileNavbar,
+  desktopNavbar,
+  desktopLinkContainer,
+  desktopLinks,
+  mobileLinksContainer,
+  mobileLinks,
+  hoverLinks
+} from './animations'
 
-  const handleExtendNavBar = () => {
-    setExtendNavBar(!extendNavBar)
+interface LinksProps {
+  handOpening: () => void
+  elements: { name: string; to: string }[]
+}
+
+export const Menu = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const isMobile = useMediaQuery({ query: '(max-width: 700px)' })
+
+  const sidebarVariants = isMobile ? mobileNavbar : desktopNavbar
+  const linkContainerVariants = isMobile
+    ? mobileLinksContainer
+    : desktopLinkContainer
+  const linkVariants = isMobile ? mobileLinks : desktopLinks
+
+  const handOpening = () => {
+    setIsOpen(!isOpen)
   }
 
   useEffect(() => {
-    extendNavBar
-      ? (document.body.style.overflow = 'hidden')
-      : (document.body.style.overflow = 'auto')
-  }, [extendNavBar])
+    if (isMobile && isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isOpen, isMobile])
 
   return (
-    <S.NavbarContainer extendNavBar={extendNavBar}>
+    <S.NavbarContainer
+      isOpen={isOpen}
+      initial={false}
+      animate={isOpen ? 'open' : 'closed'}
+      variants={sidebarVariants}
+    >
       <S.LeftSideContainer>
-        <S.OpenLinksButton onClick={handleExtendNavBar}>
-          {extendNavBar ? <FaTimes /> : <FaBars />}
-        </S.OpenLinksButton>
+        <MenuToggle onClick={handOpening} />
       </S.LeftSideContainer>
-      <S.MiddleContainer extendNavBar={extendNavBar}>
-        <S.NavbarLinkContainer>
-          <S.NavbarLink to="/" onClick={handleExtendNavBar}>
-            Home
-          </S.NavbarLink>
-          <S.NavbarLink to="/admin/counter" onClick={handleExtendNavBar}>
-            Counter
-          </S.NavbarLink>
-          <S.NavbarLink to="/" onClick={handleExtendNavBar}>
-            Home
-          </S.NavbarLink>
-          <S.NavbarLink to="/admin/counter" onClick={handleExtendNavBar}>
-            Counter
-          </S.NavbarLink>
-          <S.NavbarLink to="/" onClick={handleExtendNavBar}>
-            Home
-          </S.NavbarLink>
-          <S.NavbarLink to="/admin/counter" onClick={handleExtendNavBar}>
-            Counter
-          </S.NavbarLink>
+      <S.MiddleContainer isOpen={isOpen}>
+        <S.NavbarLinkContainer
+          variants={linkContainerVariants}
+          initial={false}
+          animate={isOpen ? 'open' : 'closed'}
+        >
+          {routeLinks.map((link, index) => (
+            <motion.div
+              key={index}
+              initial={{ color: theme.colors.white }}
+              variants={linkVariants}
+              whileHover={hoverLinks}
+            >
+              <S.NavbarLink key={index} to={link.to} onClick={handOpening}>
+                {link.name}
+              </S.NavbarLink>
+            </motion.div>
+          ))}
         </S.NavbarLinkContainer>
       </S.MiddleContainer>
       <S.RightSideContainer>
-        <S.Logo>Logo</S.Logo>{' '}
+        <S.Logo>Logo</S.Logo>
       </S.RightSideContainer>
     </S.NavbarContainer>
   )
 }
+
+const routeLinks = [
+  { name: 'Home', to: '/' },
+  { name: 'Counter', to: '/admin/counter' },
+  { name: 'Home', to: '/' },
+  { name: 'Counter', to: '/admin/counter' },
+  { name: 'Home', to: '/' },
+  { name: 'Counter', to: '/admin/counter' }
+]
