@@ -3,13 +3,16 @@ import { createBrowserRouter } from 'react-router-dom'
 import { loginAction } from './Auth/loginAction'
 import { logoutAction } from './Auth/logoutAction'
 import { protectedLoader } from './Auth/protectedLoader'
+import { signupAction } from './Auth/signupAction'
+import { AccountRoot } from './components/AccountRoot'
 import { Counter } from './components/Counter'
+import { PublicRoot } from './components/PublicRoot'
 import { USER_ROLES } from './helpers/types'
 import { ContactPage, contactLoader } from './pages/Contact/ContactPage'
 import { ErrorPage } from './pages/Error/ErrorPage'
 import { Home, getContacts } from './pages/Home/Home'
-import { Login } from './pages/Login/Login'
-import { PublicRoot } from './pages/PublicRoot/PublicRoot'
+import { Signin } from './pages/Signin'
+import { Signup } from './pages/Signup'
 
 export const AppRouter = createBrowserRouter([
   {
@@ -42,12 +45,23 @@ export const AppRouter = createBrowserRouter([
     ]
   },
   {
-    path: 'login',
-    element: <Login />,
-    action: loginAction
-  },
-  {
-    path: '/logout',
-    loader: logoutAction
+    element: <AccountRoot />,
+    path: 'auth',
+    children: [
+      {
+        path: '/auth/login',
+        element: <Signin />,
+        action: loginAction
+      },
+      {
+        path: '/auth/create-account',
+        element: <Signup />,
+        action: signupAction
+      },
+      {
+        path: '/auth/logout',
+        loader: logoutAction
+      }
+    ]
   }
 ])

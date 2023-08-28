@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import { useMediaQuery } from 'react-responsive'
+import { useEffect, useRef, useState } from 'react'
 import { BsPersonCircle } from 'react-icons/bs'
+import { useMediaQuery } from 'react-responsive'
+import { Link } from 'react-router-dom'
 
 import theme from '../../styles/theme'
 import * as S from './styles'
 
+import Logo from '../../assets/svg-logo-h.svg'
 import { authProvider } from '../../Auth/AuthProvider'
 import { MenuToggle } from '../MenuToogle'
 import {
@@ -18,13 +20,53 @@ import {
   hoverLinks
 } from './animations'
 
+interface AccountMenuOptionsProps {
+  handleAccountMenu: () => void
+}
+const WithUserMenuOptions = ({
+  handleAccountMenu
+}: AccountMenuOptionsProps) => {
+  return (
+    <>
+      <S.AccountMenuItem to="/configs" onClick={handleAccountMenu}>
+        Configurações
+      </S.AccountMenuItem>
+      <S.AccountMenuItem
+        to="/auth/logout"
+        focus="secondary"
+        onClick={handleAccountMenu}
+      >
+        Logout
+      </S.AccountMenuItem>
+    </>
+  )
+}
+
+const WihtoutUserMenuOptions = ({
+  handleAccountMenu
+}: AccountMenuOptionsProps) => {
+  return (
+    <>
+      <S.AccountMenuItem
+        to="/auth/login"
+        focus="emphasis"
+        onClick={handleAccountMenu}
+      >
+        Login
+      </S.AccountMenuItem>
+      <S.AccountMenuItem to="/auth/create-account" onClick={handleAccountMenu}>
+        Criar Conta
+      </S.AccountMenuItem>
+    </>
+  )
+}
+
 export const Menu = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [showAccountMenu, setShowAccountMenu] = useState(false)
-
   const username = authProvider.getUserName()
-
   const isMobile = useMediaQuery({ query: `(max-width: ${theme.screens.sm})` })
+  const accountMenuRef = useRef<HTMLDivElement>(null)
 
   const sidebarVariants = isMobile ? mobileNavbar : desktopNavbar
   const linkContainerVariants = isMobile
@@ -36,9 +78,26 @@ export const Menu = () => {
     setIsOpen(!isOpen)
   }
 
-  const handAccountMenu = () => {
+  const handleAccountMenu = () => {
     setShowAccountMenu(!showAccountMenu)
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        accountMenuRef.current &&
+        !accountMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowAccountMenu(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   useEffect(() => {
     if (isMobile && isOpen) {
@@ -71,47 +130,25 @@ export const Menu = () => {
           <MenuToggle onClick={handOpening} />
         </S.TopbarLeftContainer>
         <S.TopbarMiddleContainer>
-          <S.Logo>Logo </S.Logo>
+          <Link to="/">
+            <S.Logo>
+              <img src={Logo} alt="a" />
+            </S.Logo>
+          </Link>
         </S.TopbarMiddleContainer>
 
         <S.TopbarRightContainer>
           {username ? (
-            <LoggedPerson username={username} onClick={handAccountMenu} />
+            <LoggedPerson username={username} onClick={handleAccountMenu} />
           ) : (
-            <LoggedPerson username={'Conta'} onClick={handAccountMenu} />
+            <LoggedPerson username={'Conta'} onClick={handleAccountMenu} />
           )}
           {showAccountMenu && (
-            <S.AccountMenu>
-              {!username && (
-                <S.AccountMenuItem
-                  to="/login"
-                  focus="emphasis"
-                  onClick={handAccountMenu}
-                >
-                  Login
-                </S.AccountMenuItem>
-              )}
-              {username && (
-                <S.AccountMenuItem to="/configs" onClick={handAccountMenu}>
-                  Configurações
-                </S.AccountMenuItem>
-              )}
-              {!username && (
-                <S.AccountMenuItem
-                  to="/create-account"
-                  onClick={handAccountMenu}
-                >
-                  Criar Conta
-                </S.AccountMenuItem>
-              )}
-              {username && (
-                <S.AccountMenuItem
-                  to="/logout"
-                  focus="secondary"
-                  onClick={handAccountMenu}
-                >
-                  Logout
-                </S.AccountMenuItem>
+            <S.AccountMenu ref={accountMenuRef}>
+              {username ? (
+                <WithUserMenuOptions handleAccountMenu={handleAccountMenu} />
+              ) : (
+                <WihtoutUserMenuOptions handleAccountMenu={handleAccountMenu} />
               )}
             </S.AccountMenu>
           )}
@@ -143,9 +180,8 @@ export const Menu = () => {
 
 const routeLinks = [
   { name: 'Home', to: '/' },
-  { name: 'Counter', to: '/admin/counter' },
-  { name: 'Home', to: '/' },
-  { name: 'Counter', to: '/admin/counter' },
-  { name: 'Home', to: '/' },
-  { name: 'Counter', to: '/admin/counter' }
+  { name: 'Empresa', to: '/about-us' },
+  { name: 'Projetos', to: '/projects' },
+  { name: 'Parceiros', to: '/partners' },
+  { name: 'Duvidas', to: '/faq' }
 ]

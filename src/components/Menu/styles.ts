@@ -1,18 +1,12 @@
 import { motion } from 'framer-motion'
+import { darken, lighten } from 'polished'
 import { Link } from 'react-router-dom'
 import { css, styled } from 'styled-components'
-import { darken } from 'polished'
 import { DefaultTheme } from 'styled-components/dist/types'
 
 const shouldForwardProp = (prop: string) => !['isOpen'].includes(prop)
 
-export const Container = styled(motion.nav)`
-  ${({ theme }) => css`
-    width: 100%;
-    padding: calc(${theme.grid.gutter} / 4) calc(${theme.grid.gutter} / 2);
-    background-color: ${theme.colors.emerald[900]};
-  `}
-`
+export const Container = styled(motion.nav)``
 
 export const Topbar = styled.div`
   ${({ theme }) => css`
@@ -51,11 +45,7 @@ export const TopbarRightContainer = styled.div`
 `
 export const Logo = styled.div`
   ${({ theme }) => css`
-    font-size: ${theme.fonts.sizes['4xl']};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: ${theme.colors.white};
+    width: 120px;
 
     @media screen and (min-width: ${theme.screens.sm}) {
       justify-content: start;
@@ -73,7 +63,7 @@ export const NavbarMenu = styled(motion.nav).withConfig({
     justify-content: center;
 
     @media screen and (min-width: ${theme.screens.sm}) {
-      max-height: 100%;
+      justify-content: flex-start;
     }
   `}
 `
@@ -89,10 +79,12 @@ export const NavbarLinkContainer = styled(motion.div)`
     @media screen and (min-width: ${theme.screens.sm}) {
       display: inline-flex;
       flex-direction: row;
-      justify-content: flex-start;
-      gap: ${theme.size['12']};
-      padding: ${theme.size['2']} ${theme.size['8']};
-      background-color: ${darken(0.02, theme.colors.emerald[900])};
+      align-items: start;
+      justify-content: space-around;
+      padding: ${theme.size[5]} ${theme.size[2]};
+
+      min-width: 80%;
+      background-color: ${darken(0.05, theme.colors.background)};
       border-radius: ${theme.borderRadius.rounded};
     }
   `}
@@ -106,7 +98,7 @@ export const NavbarLink = styled(Link)`
     margin: ${theme.size[1]};
 
     @media screen and (min-width: ${theme.screens.sm}) {
-      font-size: ${theme.fonts.sizes.xl};
+      font-size: ${theme.fonts.sizes['2xl']};
     }
 
     @media screen and (min-width: ${theme.screens.md}) {
@@ -129,7 +121,8 @@ export const AccountDetails = styled.div`
 
 export const AccountAvatar = styled.div`
   ${({ theme }) => css`
-    font-size: ${theme.size[6]};
+    font-size: ${theme.size[7]};
+    color: ${theme.colors.gray[400]};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -138,7 +131,8 @@ export const AccountAvatar = styled.div`
 
 export const AccountUser = styled.div`
   ${({ theme }) => css`
-    font-size: ${theme.fonts.sizes.xl};
+    font-size: ${theme.fonts.sizes['2xl']};
+    color: ${theme.colors.light};
     font-weight: bold;
   `}
 `
@@ -146,7 +140,7 @@ export const AccountUser = styled.div`
 export const AccountMenu = styled.div`
   ${({ theme }) => css`
     position: absolute;
-    background-color: ${darken(0.08, theme.colors.emerald[900])};
+    background-color: ${darken(0.08, theme.colors.background)};
     border-radius: ${theme.borderRadius.xl};
 
     min-width: ${theme.size[80]};
@@ -166,14 +160,21 @@ interface WrapperProps {
 
 const wrapperModifiers = {
   emphasis: (theme: DefaultTheme) => css`
-    background-color: ${theme.colors.blue[800]};
+    background-color: ${theme.colors.background};
     width: 95%;
 
     &:hover {
-      background-color: ${theme.colors.blue[700]};
+      background-color: ${lighten(0.05, theme.colors.background)};
     }
   `,
-  secondary: (theme: DefaultTheme) => css``
+  secondary: (theme: DefaultTheme) => css`
+    background-color: ${theme.colors.gray[700]};
+    width: 95%;
+
+    &:hover {
+      background-color: ${theme.colors.gray[500]};
+    }
+  `
 }
 
 export const AccountMenuItem = styled(Link)<WrapperProps>`
@@ -182,13 +183,13 @@ export const AccountMenuItem = styled(Link)<WrapperProps>`
     align-items: center;
     justify-content: center;
     border-radius: ${theme.borderRadius.xl};
-    color: ${theme.colors.white};
+    color: ${theme.colors.light};
     width: 100%;
     font-size: ${theme.fonts.sizes['xl']};
     padding: ${theme.size[4]};
 
     &:hover {
-      background-color: ${theme.colors.emerald[900]};
+      background-color: ${theme.colors.background};
     }
 
     ${!!focus && wrapperModifiers[focus](theme)};

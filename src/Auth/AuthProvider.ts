@@ -53,6 +53,43 @@ export class AuthProvider implements AuthProviderInterface {
     }
   }
 
+  async signup(
+    username: string,
+    email: string,
+    password: string,
+    passwordConfirmation: string
+  ) {
+    const config: AxiosRequestConfig = {
+      data: {
+        username,
+        email,
+        password,
+        passwordConfirmation
+      },
+      method: 'POST'
+    }
+
+    try {
+      const response = await axiosRequest<Login, typeof LoginSchema>(
+        '/auth/signup',
+        LoginSchema,
+        config
+      )
+
+      if (!response.data) throw new Error('Invalid Credentials')
+
+      this.token = response.data.token
+      this.username = response.data.username
+
+      this.setAuthHeader()
+
+      Cookies.set('token', this.token, { expires: 7, secure: true })
+      Cookies.set('username', this.username, { expires: 7 })
+    } catch (error) {
+      throw new Error('Something went wrong')
+    }
+  }
+
   logout() {
     this.token = null
     this.username = null

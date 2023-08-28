@@ -16,7 +16,7 @@ export async function protectedLoader({
   if (!authProvider.isAuthenticated) {
     const params = new URLSearchParams()
     params.set('from', new URL(request.url).pathname)
-    return redirect('/login?' + params.toString())
+    return redirect('/auth/login?' + params.toString())
   }
 
   try {

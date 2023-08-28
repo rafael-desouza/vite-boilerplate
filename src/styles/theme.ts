@@ -1,8 +1,13 @@
 export default {
   colors: {
+    background: '#08295e',
+    primary: '#8b5cf6',
+    secondary: '#fc2f68',
+    light: '#f9ebc4',
+    assets: '#ffb391',
     black: '#000',
     white: '#fff',
-    primary: '#4c1d95',
+
     menuColor: '#000',
     rose: {
       50: '#fff1f2',

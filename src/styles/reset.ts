@@ -1,26 +1,26 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, css } from 'styled-components'
 
 const ResetStyles = createGlobalStyle`
+${({ theme }) => css`
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: ${theme.colors.background};
+    color: ${theme.colors.light};
+    box-sizing: border-box;
+  }
 
- html,
- body {
-   padding: 0;
-   margin: 0;
-   font-family: 'Playfair Display', serif;
-   background-color:  #f6f6f0;
-   box-sizing: border-box;
- }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
- a {
-   color: inherit;
-   text-decoration: none;
- }
-
-
- * {
-   box-sizing: border-box;
- }
-
+  * {
+    box-sizing: border-box;
+  }
+`}
 `
 
 export default ResetStyles

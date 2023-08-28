@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRouteError } from 'react-router-dom'
 
 export const ErrorPage = () => {

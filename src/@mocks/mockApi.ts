@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter'
-import { api } from '../services/api'
+
 import { USER_ROLES } from '../helpers/types'
+import { api } from '../services/api'
 
 if (process.env.NODE_ENV === 'development') {
   const mock = new MockAdapter(api)
@@ -55,8 +56,10 @@ if (process.env.NODE_ENV === 'development') {
     gender: 'n/a'
   })
 
-  mock.onPost(`${API_URL}/auth/signin`).reply((config) => {
+  mock.onPost(`${API_URL}/auth/signin`).reply(async (config) => {
     const { email, password } = JSON.parse(config.data as string)
+
+    await new Promise((f) => setTimeout(f, 1500))
 
     if (email === 'test@example.com' && password === '123456') {
       return [
@@ -78,13 +81,45 @@ if (process.env.NODE_ENV === 'development') {
     ]
   })
 
+  mock.onPost(`${API_URL}/auth/signup`).reply(async (config) => {
+    const { username, email, password, passwordConfirmation } = JSON.parse(
+      config.data as string
+    )
+
+    await new Promise((f) => setTimeout(f, 1500))
+
+    if (
+      username === 'Rafael' &&
+      email === 'test@example.com' &&
+      password === '123456' &&
+      passwordConfirmation === '123456'
+    ) {
+      return [
+        200,
+        {
+          status: 'success',
+          token: 'fake-jwt-token',
+          username: 'Rafael'
+        }
+      ]
+    }
+
+    return [
+      401,
+      {
+        status: 'error',
+        message: 'Something Went Wrong'
+      }
+    ]
+  })
+
   mock.onGet(`${API_URL}/auth/role`).reply((config) => {
     const authorizationHeader = config.headers?.['Authorization']
 
     if (authorizationHeader) {
       const token = authorizationHeader.split(' ')[1]
       if (token) {
-        return [200, { role: USER_ROLES.USER }]
+        return [200, { role: USER_ROLES.ADMIN }]
       }
     }
 
