@@ -15,6 +15,7 @@ export const AppRouter = createBrowserRouter([
   {
     element: <PublicRoot />,
     errorElement: <ErrorPage />,
+    path: '/',
     children: [
       {
         path: '/',
@@ -25,15 +26,6 @@ export const AppRouter = createBrowserRouter([
         path: 'contact/:contactId',
         loader: contactLoader,
         element: <ContactPage />
-      },
-      {
-        path: 'login',
-        element: <Login />,
-        action: loginAction
-      },
-      {
-        path: '/logout',
-        loader: logoutAction
       }
     ]
   },
@@ -48,5 +40,14 @@ export const AppRouter = createBrowserRouter([
         element: <Counter />
       }
     ]
+  },
+  {
+    path: 'login',
+    element: <Login />,
+    action: loginAction
+  },
+  {
+    path: '/logout',
+    loader: logoutAction
   }
 ])

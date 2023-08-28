@@ -14,8 +14,7 @@ interface AuthProviderInterface {
 
 export class AuthProvider implements AuthProviderInterface {
   token: string | null = Cookies.get('token') || null
-  username: string | null = Cookies.get('user') || null
-  role: string | null = Cookies.get('role') || null
+  username: string | null = Cookies.get('username') || null
 
   get isAuthenticated(): boolean {
     if (!this.token) return false
@@ -59,9 +58,13 @@ export class AuthProvider implements AuthProviderInterface {
     this.username = null
 
     Cookies.remove('token')
-    Cookies.remove('user')
+    Cookies.remove('username')
 
     api.defaults.headers.common['Authorization'] = undefined
+  }
+
+  getUserName() {
+    return this.username
   }
 
   setAuthHeader() {

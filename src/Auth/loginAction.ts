@@ -28,5 +28,6 @@ export async function loginAction({ request }: LoaderFunctionArgs) {
   }
 
   const redirectTo = formData.get('redirectTo') as string | null
+
   return redirect(redirectTo || '/')
 }

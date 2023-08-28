@@ -3,6 +3,7 @@ export default {
     black: '#000',
     white: '#fff',
     primary: '#4c1d95',
+    menuColor: '#000',
     rose: {
       50: '#fff1f2',
       100: '#ffe4e6',
@@ -362,5 +363,9 @@ export default {
       '8xl': '1',
       '9xl': '1'
     }
+  },
+  grid: {
+    container: '200rem',
+    gutter: '3.2rem'
   }
 }

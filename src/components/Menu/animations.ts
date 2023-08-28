@@ -6,27 +6,23 @@ export const mobileNavbar: Variants = {
   open: {
     height: '100vh',
     transition: {
-      type: 'spring',
-      stiffness: 50,
-      restDelta: 0.5
+      duration: 0.75
     }
   },
   closed: {
-    height: theme.size[20],
+    height: '0',
     transition: {
-      type: 'spring',
-      stiffness: 50,
-      restDelta: 0.5
+      duration: 0.75
     }
   }
 }
 
 export const desktopNavbar: Variants = {
   open: {
-    height: theme.size[20]
+    height: '100%'
   },
   closed: {
-    height: theme.size[20]
+    height: '100%'
   }
 }
 
